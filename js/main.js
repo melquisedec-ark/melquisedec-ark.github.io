@@ -56,7 +56,9 @@ document.addEventListener('DOMContentLoaded', () => {
       windows: { pattern: 'windows', fallback: '.exe' },
       linux: { pattern: 'linux', fallback: '.AppImage' },
       mac: { pattern: 'mac', fallback: '.dmg' },
-      android: { pattern: 'android', fallback: '.apk' },
+      'android-arm64': { pattern: 'arm64-v8a', fallback: '.apk' },
+      'android-armeabi': { pattern: 'armeabi-v7a', fallback: '.apk' },
+      'android-x86': { pattern: 'x86_64', fallback: '.apk' },
     };
 
     // Update download links
