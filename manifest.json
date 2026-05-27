@@ -1,0 +1,17 @@
+{
+  "name": "Melquisedec — Apps que transforman",
+  "short_name": "Melquisedec",
+  "description": "Descarga HimnarioID 2.0 para Windows, Linux, macOS y Android.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "icons": [
+    {
+      "src": "assets/icons/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
