@@ -157,24 +157,23 @@ ul { list-style: none; }
   gap: 0.75rem;
 }
 
-.logo-icon {
-  font-family: var(--font-heading);
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: var(--gold);
+.nav-logo-img {
   width: 40px;
   height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 2px solid var(--gold);
   border-radius: 8px;
+  object-fit: cover;
   transition: var(--transition);
 }
 
-.nav-logo:hover .logo-icon {
-  background: var(--gold);
-  color: var(--black);
+.nav-logo:hover .nav-logo-img {
+  box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
+}
+
+.footer-logo-img {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  object-fit: cover;
 }
 
 .logo-text {

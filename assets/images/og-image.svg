@@ -10,7 +10,7 @@
   <rect x="45" y="45" width="40" height="40" rx="8" fill="none" stroke="#D4AF37" stroke-width="3"/>
   <text x="65" y="75" font-family="Georgia, serif" font-size="30" font-weight="700" fill="#D4AF37" text-anchor="middle">M</text>
   <text x="100" y="75" font-family="Georgia, serif" font-size="28" font-weight="600" fill="#FFF">elquisedec</text>
-  <text x="45" y="330" font-family="Georgia, serif" font-size="72" font-weight="700" fill="#FFF">Himnario<tspan fill="#D4AF37">ID</tspan></text>
+  <text x="45" y="330" font-family="Georgia, serif" font-size="72" font-weight="700" fill="#FFF">MQ <tspan fill="#D4AF37">App</tspan></text>
   <text x="45" y="390" font-family="Arial, sans-serif" font-size="28" fill="#A0A0A0">La plataforma definitiva para himnos con acordes.</text>
   <text x="45" y="430" font-family="Arial, sans-serif" font-size="28" fill="#A0A0A0">Disponible para Windows, Linux, macOS y Android.</text>
   <text x="45" y="540" font-family="Arial, sans-serif" font-size="20" fill="#D4AF37">melquisedec-ark.github.io</text>

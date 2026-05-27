@@ -51,10 +51,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const getAsset = (pattern) =>
       release.assets?.find(a => a.name.toLowerCase().includes(pattern));
 
-    // Update version badge
-    const badge = document.getElementById('versionBadge');
-    if (badge) badge.textContent = release.tag_name;
-
     // Map platforms to asset patterns
     const platformMap = {
       windows: { pattern: 'windows', fallback: '.exe' },
@@ -84,9 +80,8 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
 
-    // Update stats
-    const verEl = document.getElementById('statVersion');
-    if (verEl) verEl.textContent = release.tag_name.replace(/^v/, '');
+    // Note: version badge (hero) and statVersion (about) are static
+    // They show "MQ App v2.0" and "2.0" respectively from the HTML
   }
 
   // Fetch and update
