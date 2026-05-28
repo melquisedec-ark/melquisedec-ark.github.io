@@ -1,0 +1,8 @@
+# ═══════════════════════════════════════════
+# Melquisedec — Landing Page
+# ═══════════════════════════════════════════
+
+User-agent: *
+Allow: /
+
+Sitemap: https://melquisedec-ark.github.io/sitemap.xml

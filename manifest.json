@@ -1,11 +1,13 @@
 {
-  "name": "Melquisedec — Apps que transforman",
-  "short_name": "Melquisedec",
-  "description": "Descarga HimnarioID 2.0 para Windows, Linux, macOS y Android.",
+  "name": "MQ App by Melquisedec — Himnos con acordes y proyección en vivo",
+  "short_name": "MQ App",
+  "description": "Descarga MQ App para himnos con acordes, proyección en vivo y control multidispositivo. Windows, Linux, macOS y Android.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#000000",
   "theme_color": "#000000",
+  "categories": ["music", "religion", "productivity"],
+  "lang": "es",
   "icons": [
     {
       "src": "assets/icons/favicon.png",
@@ -16,7 +18,8 @@
     {
       "src": "assets/icons/favicon.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ]
 }
