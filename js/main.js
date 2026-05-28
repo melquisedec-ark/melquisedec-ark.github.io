@@ -90,7 +90,42 @@ document.addEventListener('DOMContentLoaded', () => {
   fetchLatestRelease().then(updateDownloadLinks);
 
   /* ═══════════════════════════════════════════
-     2. Mobile Nav Toggle
+     2. Download handler (mobile-safe)
+     ───
+     En PC: target="_blank" funciona bien.
+     En Android: abre una Custom Tab que muestra el progreso
+     pero el archivo nunca se guarda. Solucion:
+     iframe oculto que procesa la redireccion GitHub → CDN.
+     Chrome intercepta Content-Disposition: attachment y
+     el archivo llega al Download Manager del dispositivo.
+     ═══════════════════════════════════════════ */
+  function triggerDownload(url) {
+    const iframe = document.createElement('iframe');
+    iframe.style.display = 'none';
+    iframe.src = url;
+    document.body.appendChild(iframe);
+    // Limpiar despues de que la descarga haya tenido tiempo de iniciar
+    setTimeout(() => {
+      if (iframe.parentNode) iframe.parentNode.removeChild(iframe);
+    }, 60000);
+  }
+
+  document.addEventListener('click', (e) => {
+    const card = e.target.closest('.download-card, [data-platform]');
+    if (card && card.href && card.href !== '#') {
+      e.preventDefault();
+      // Si es descarga directa (asset en GitHub CDN) → iframe oculto
+      // Si es fallback (pagina de releases) → abrir normal
+      if (card.href.includes('releases/download')) {
+        triggerDownload(card.href);
+      } else {
+        window.open(card.href, '_blank', 'noopener');
+      }
+    }
+  });
+
+  /* ═══════════════════════════════════════════
+     3. Mobile Nav Toggle
      ═══════════════════════════════════════════ */
   const navToggle = document.getElementById('navToggle');
   const navLinks = document.getElementById('navLinks');
