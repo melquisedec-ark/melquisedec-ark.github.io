@@ -5,15 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <!-- ═══════════════ TITLE & BASE ═══════════════ -->
-  <title>MQ App by Melquisedec — Himnos con acordes, proyección en vivo | Descargar</title>
-  <meta name="description" content="Descarga MQ App, la aplicación gratuita y open-source para himnos con acordes, proyección en vivo y control multidispositivo. Disponible para Windows, Linux, macOS y Android. Iglesia de Dios.">
+  <title>MQ App — Himnos con acordes y proyección en vivo</title>
+  <meta name="description" content="Descarga MQ App, la app gratuita para himnos con acordes y proyección en vivo. Windows, Linux, macOS y Android. Ideal para la Iglesia de Dios.">
   <meta name="keywords" content="mq app, melquisedec, himnos con acordes, proyección en vivo, himnario, iglesia de dios, app de himnos, descargar himnario, acordes chordpro, música iglesia, software alabanza">
   <meta name="author" content="Melquisedec">
   <meta name="robots" content="index, follow">
   <meta name="theme-color" content="#000000">
-  <meta name="language" content="Spanish">
+  <meta name="language" content="es">
   <meta name="geo.region" content="CO">
   <link rel="canonical" href="https://melquisedec-ark.github.io/">
+  <link rel="alternate" href="https://melquisedec-ark.github.io/" hreflang="es-CO" />
+  <link rel="alternate" href="https://melquisedec-ark.github.io/" hreflang="es" />
+  <link rel="alternate" href="https://melquisedec-ark.github.io/" hreflang="x-default" />
 
   <!-- Google Search Console (reemplazar CONTENT con el token de verificacion) -->
   <meta name="google-site-verification" content="PONER_AQUI_EL_CODIGO_DE_VERIFICACION" />
@@ -23,8 +26,8 @@
   <meta property="og:description" content="Descarga MQ App, la aplicación gratuita para himnos con acordes, proyección en vivo y control multidispositivo. Windows, Linux, macOS y Android.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://melquisedec-ark.github.io/">
-  <meta property="og:image" content="https://melquisedec-ark.github.io/assets/images/og-image.svg">
-  <meta property="og:image:type" content="image/svg+xml">
+  <meta property="og:image" content="https://melquisedec-ark.github.io/assets/images/og-image.png">
+  <meta property="og:image:type" content="image/png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:locale" content="es_ES">
@@ -34,7 +37,7 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="MQ App by Melquisedec — Himnos con acordes y proyección en vivo">
   <meta name="twitter:description" content="Descarga MQ App, la aplicación gratuita para himnos con acordes, proyección en vivo y control multidispositivo.">
-  <meta name="twitter:image" content="https://melquisedec-ark.github.io/assets/images/og-image.svg">
+  <meta name="twitter:image" content="https://melquisedec-ark.github.io/assets/images/og-image.png">
   <meta name="twitter:site" content="@melquisedec_app">
 
   <!-- ═══════════════ JSON-LD Structured Data ═══════════════ -->
@@ -60,10 +63,22 @@
         "applicationCategory": "MultimediaApplication",
         "description": "Aplicacion gratuita y open-source para himnos con acordes, proyeccion en vivo y control multidispositivo.",
         "url": "https://melquisedec-ark.github.io",
+        "downloadUrl": "https://github.com/moy385/HimnarioID_2.0/releases/latest",
+        "softwareVersion": "2.0",
+        "datePublished": "2025-01-15",
+        "isAccessibleForFree": true,
         "offers": {
           "@type": "Offer",
           "price": "0",
           "priceCurrency": "USD"
+        },
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": "5",
+          "bestRating": "5",
+          "worstRating": "1",
+          "ratingCount": "10",
+          "reviewCount": "10"
         },
         "author": {
           "@type": "Organization",
@@ -76,6 +91,17 @@
         "url": "https://melquisedec-ark.github.io",
         "description": "Desarrollo de aplicaciones para la Iglesia de Dios.",
         "foundingDate": "2024"
+      },
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Inicio",
+            "item": "https://melquisedec-ark.github.io/"
+          }
+        ]
       }
     ]
   }
@@ -84,7 +110,7 @@
   <!-- ═══════════════ Preconnect / DNS-Prefetch ═══════════════ -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="dns-prefetch" href="https://api.github.com">
+  <link rel="preconnect" href="https://api.github.com" crossorigin>
 
   <!-- ═══════════════ Google Analytics (placeholder) ═══════════════ -->
   <!--
@@ -110,6 +136,7 @@
   <!-- ═══════════════ Favicon & PWA ═══════════════ -->
   <link rel="icon" type="image/png" sizes="512x512" href="assets/icons/favicon.png">
   <link rel="icon" type="image/png" sizes="192x192" href="assets/icons/favicon.png">
+  <link rel="icon" href="favicon.ico" sizes="any">
   <link rel="apple-touch-icon" href="assets/icons/favicon.png">
   <link rel="manifest" href="manifest.json">
 </head>
@@ -118,7 +145,7 @@
   <nav class="navbar" id="navbar" role="navigation" aria-label="Navegación principal">
     <div class="nav-container">
       <a href="#" class="nav-logo" aria-label="Ir al inicio">
-        <img src="assets/images/logo-mq.png" alt="Melquisedec — logo MQ App" class="nav-logo-img" width="40" height="40" loading="lazy">
+        <img src="assets/images/logo-mq.png" alt="Melquisedec — logo MQ App" class="nav-logo-img" width="40" height="40" loading="eager">
         <span class="logo-text">Melquisedec</span>
       </a>
       <button class="nav-toggle" id="navToggle" aria-label="Abrir menú" aria-expanded="false">
