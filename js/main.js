@@ -217,5 +217,19 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  /* ═══════════════════════════════════════════
+     8. Register Service Worker (PWA)
+     ═══════════════════════════════════════════ */
+  if ('serviceWorker' in navigator) {
+    // Esperar a que la página termine de cargar para registrar el SW
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js').then((reg) => {
+        console.log('SW registered:', reg.scope);
+      }).catch((err) => {
+        console.warn('SW registration failed:', err);
+      });
+    });
+  }
+
   console.log('🔶 Melquisedec — Landing page loaded');
 });
