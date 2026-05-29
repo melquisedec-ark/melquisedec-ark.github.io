@@ -11,79 +11,116 @@ document.addEventListener('DOMContentLoaded', () => {
   const REPO_NAME = 'HimnarioID_2.0';
   const GITHUB_API = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/releases/latest`;
   const CACHE_KEY = 'melquisedec_release_cache';
-  const CACHE_TTL = 30 * 60 * 1000; // 30 minutes
+  const CACHE_TTL = 5 * 60 * 1000;     // 5 min (antes 30 min)
+  const API_TIMEOUT = 5000;            // 5 segundos de timeout
 
   /* ═══════════════════════════════════════════
      1. Fetch latest version from GitHub Releases
+     ──
+     Estrategia: stale-while-revalidate
+     1. Muestra caché instantáneamente (si existe y es reciente)
+     2. En background, busca datos frescos de la API
+     3. Si la red falla, usa el caché como respaldo (sin importar edad)
      ═══════════════════════════════════════════ */
+
+  let _bgPromise = null; // evita revalidaciones duplicadas
+
   async function fetchLatestRelease() {
-    // Try cache first
+    // ── Leer caché ──────────────────────────────────────────────
     const cached = localStorage.getItem(CACHE_KEY);
+    let cachedData = null;
+    let cachedTimestamp = 0;
+
     if (cached) {
       try {
-        const { data, timestamp } = JSON.parse(cached);
-        if (Date.now() - timestamp < CACHE_TTL) {
-          return data;
-        }
-      } catch { /* ignore */ }
+        const parsed = JSON.parse(cached);
+        cachedData = parsed.data;
+        cachedTimestamp = parsed.timestamp;
+      } catch { /* ignorar */ }
     }
 
-    try {
-      const res = await fetch(GITHUB_API);
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const data = await res.json();
+    // ── Revalidación en background ──────────────────────────────
+    // Siempre se dispara, incluso si el caché es reciente.
+    // Así garantizamos que los datos estén siempre al día.
+    const bg = _revalidateInBackground();
+    _bgPromise = _bgPromise || bg;
+    // No await - corre en background mientras seguimos
 
-      // Cache it
-      localStorage.setItem(CACHE_KEY, JSON.stringify({ data, timestamp: Date.now() }));
-      return data;
-    } catch (err) {
-      console.warn('Failed to fetch release:', err);
+    // ── Devolver datos disponibles ──────────────────────────────
+    if (cachedData && Date.now() - cachedTimestamp < CACHE_TTL) {
+      // Caché reciente → devolverlo mientras se revalida en bg
+      return cachedData;
+    }
+
+    // Caché vencido o inexistente → esperar la revalidación
+    try {
+      return await _bgPromise;
+    } catch {
+      // Revalidación falló → devolver cualquier caché que tengamos
+      if (cachedData) return cachedData;
       return null;
     }
   }
 
+  async function _revalidateInBackground() {
+    try {
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), API_TIMEOUT);
+
+      const res = await fetch(`${GITHUB_API}?_=${Date.now()}`, {
+        signal: controller.signal,
+        headers: { 'Accept': 'application/vnd.github+json' },
+      });
+      clearTimeout(timer);
+
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+      const data = await res.json();
+      localStorage.setItem(
+        CACHE_KEY,
+        JSON.stringify({ data, timestamp: Date.now() }),
+      );
+      return data;
+    } catch (err) {
+      console.warn('Background revalidation failed:', err);
+      throw err;
+    }
+  }
+
+  /* ─── Update download links ─── */
   function updateDownloadLinks(release) {
     if (!release) return;
 
     console.log(`Latest release: ${release.tag_name}`);
 
-    // Helper to find asset by name
     const getAsset = (pattern) =>
       release.assets?.find(a => a.name.toLowerCase().includes(pattern));
 
-    // Map platforms to asset patterns
     const platformMap = {
-      windows: { pattern: 'windows', fallback: '.exe' },
-      linux: { pattern: 'linux', fallback: '.AppImage' },
-      mac: { pattern: 'mac', fallback: '.dmg' },
-      'android-arm64': { pattern: 'arm64-v8a', fallback: '.apk' },
-      'android-armeabi': { pattern: 'armeabi-v7a', fallback: '.apk' },
-      'android-x86': { pattern: 'x86_64', fallback: '.apk' },
+      windows:          { pattern: 'windows',          fallback: '.exe' },
+      linux:            { pattern: 'linux',            fallback: '.AppImage' },
+      mac:              { pattern: 'mac',              fallback: '.dmg' },
+      'android-arm64':  { pattern: 'arm64-v8a',        fallback: '.apk' },
+      'android-armeabi':{ pattern: 'armeabi-v7a',      fallback: '.apk' },
+      'android-x86':    { pattern: 'x86_64',           fallback: '.apk' },
     };
 
-    // Update download links
     for (const [platform, cfg] of Object.entries(platformMap)) {
       const asset = getAsset(cfg.pattern);
       const card = document.querySelector(`[data-platform="${platform}"]`);
       if (card && asset) {
         card.href = asset.browser_download_url;
       } else if (card) {
-        // If no matching asset, link to releases page
         card.href = `https://github.com/${REPO_OWNER}/${REPO_NAME}/releases`;
       }
     }
 
-    // Also update quick links in footer
+    // Quick links en footer
     document.querySelectorAll('[data-platform]').forEach(el => {
       const platform = el.dataset.platform;
       const asset = getAsset(platformMap[platform]?.pattern || platform);
-      if (asset) {
-        el.href = asset.browser_download_url;
-      }
+      if (asset) el.href = asset.browser_download_url;
     });
-
-    // Note: version badge (hero) and statVersion (about) are static
-    // They show "MQ App v2.0" and "2.0" respectively from the HTML
   }
 
   // Fetch and update
@@ -91,20 +128,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
   /* ═══════════════════════════════════════════
      2. Download handler (mobile-safe)
-     ───
-     En PC: target="_blank" funciona bien.
-     En Android: abre una Custom Tab que muestra el progreso
-     pero el archivo nunca se guarda. Solucion:
-     iframe oculto que procesa la redireccion GitHub → CDN.
-     Chrome intercepta Content-Disposition: attachment y
-     el archivo llega al Download Manager del dispositivo.
      ═══════════════════════════════════════════ */
   function triggerDownload(url) {
     const iframe = document.createElement('iframe');
     iframe.style.display = 'none';
     iframe.src = url;
     document.body.appendChild(iframe);
-    // Limpiar despues de que la descarga haya tenido tiempo de iniciar
     setTimeout(() => {
       if (iframe.parentNode) iframe.parentNode.removeChild(iframe);
     }, 60000);
@@ -114,8 +143,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const card = e.target.closest('.download-card, [data-platform]');
     if (card && card.href && card.href !== '#') {
       e.preventDefault();
-      // Si es descarga directa (asset en GitHub CDN) → iframe oculto
-      // Si es fallback (pagina de releases) → abrir normal
       if (card.href.includes('releases/download')) {
         triggerDownload(card.href);
       } else {
@@ -137,7 +164,6 @@ document.addEventListener('DOMContentLoaded', () => {
       navToggle.setAttribute('aria-expanded', isOpen);
     });
 
-    // Close menu on link click
     navLinks.querySelectorAll('.nav-link').forEach(link => {
       link.addEventListener('click', () => {
         navLinks.classList.remove('open');
@@ -148,56 +174,39 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /* ═══════════════════════════════════════════
-     3. Navbar scroll effect
+     4. Navbar scroll effect
      ═══════════════════════════════════════════ */
   const navbar = document.getElementById('navbar');
-  let lastScroll = 0;
-
   window.addEventListener('scroll', () => {
-    const currentScroll = window.pageYOffset;
-    if (currentScroll > 50) {
-      navbar.classList.add('scrolled');
-    } else {
-      navbar.classList.remove('scrolled');
-    }
-    lastScroll = currentScroll;
+    navbar?.classList.toggle('scrolled', window.pageYOffset > 50);
   }, { passive: true });
 
   /* ═══════════════════════════════════════════
-     4. Intersection Observer (fade-in animations)
+     5. Intersection Observer (fade-in animations)
      ═══════════════════════════════════════════ */
   const fadeElements = document.querySelectorAll('.fade-in');
-
   if (fadeElements.length > 0) {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
             entry.target.classList.add('visible');
-            // Optionally unobserve after first reveal
-            // observer.unobserve(entry.target);
           }
         });
       },
-      {
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px',
-      }
+      { threshold: 0.1, rootMargin: '0px 0px -50px 0px' }
     );
-
     fadeElements.forEach(el => observer.observe(el));
   }
 
   /* ═══════════════════════════════════════════
-     5. Footer year
+     6. Footer year
      ═══════════════════════════════════════════ */
   const yearEl = document.getElementById('year');
-  if (yearEl) {
-    yearEl.textContent = new Date().getFullYear();
-  }
+  if (yearEl) yearEl.textContent = new Date().getFullYear();
 
   /* ═══════════════════════════════════════════
-     6. Keyboard support for nav toggle
+     7. Keyboard support for nav toggle
      ═══════════════════════════════════════════ */
   if (navToggle) {
     navToggle.addEventListener('keydown', (e) => {
