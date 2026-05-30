@@ -6,11 +6,11 @@
 
 'use strict';
 
-const CACHE = 'mq-app-v1';
+const CACHE = 'mq-app-v2';
 const STATIC_ASSETS = [
   '/',
-  '/css/style.css',
-  '/js/main.js',
+  '/css/style.min.css',
+  '/js/main.min.js',
   '/manifest.json',
   '/assets/icons/favicon.png',
   '/assets/images/logo-mq.png',

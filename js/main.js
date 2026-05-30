@@ -4,6 +4,11 @@
 
 'use strict';
 
+/* ─── Solo log en desarrollo ─── */
+const IS_DEV = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+function devLog(...args) { if (IS_DEV) console.log(...args); }
+function devWarn(...args) { if (IS_DEV) console.warn(...args); }
+
 document.addEventListener('DOMContentLoaded', () => {
 
   /* ─── Config ─── */
@@ -82,7 +87,7 @@ document.addEventListener('DOMContentLoaded', () => {
       );
       return data;
     } catch (err) {
-      console.warn('Background revalidation failed:', err);
+      devWarn('Background revalidation failed:', err);
       throw err;
     }
   }
@@ -91,7 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function updateDownloadLinks(release) {
     if (!release) return;
 
-    console.log(`Latest release: ${release.tag_name}`);
+    devLog(`Latest release: ${release.tag_name}`);
 
     const getAsset = (pattern) =>
       release.assets?.find(a => a.name.toLowerCase().includes(pattern));
@@ -224,12 +229,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // Esperar a que la página termine de cargar para registrar el SW
     window.addEventListener('load', () => {
       navigator.serviceWorker.register('/sw.js').then((reg) => {
-        console.log('SW registered:', reg.scope);
+        devLog('SW registered:', reg.scope);
       }).catch((err) => {
-        console.warn('SW registration failed:', err);
+        devWarn('SW registration failed:', err);
       });
     });
   }
 
-  console.log('🔶 Melquisedec — Landing page loaded');
+  devLog('Melquisedec — Landing page loaded');
 });

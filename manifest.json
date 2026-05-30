@@ -3,6 +3,7 @@
   "short_name": "MQ App",
   "description": "Descarga MQ App para himnos con acordes, proyección en vivo y control multidispositivo. Windows, Linux, macOS y Android.",
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
   "background_color": "#000000",
   "theme_color": "#000000",

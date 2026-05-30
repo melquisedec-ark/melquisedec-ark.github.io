@@ -379,6 +379,7 @@ ul { list-style: none; }
 
 .mockup-frame {
   max-width: 480px;
+  aspect-ratio: 480 / 130;
   margin: 0 auto;
   background: var(--black-card);
   border: 1px solid rgba(255, 255, 255, 0.08);
@@ -978,6 +979,27 @@ ul { list-style: none; }
   .download-card {
     padding: 1.5rem;
   }
+}
+
+/* ─── Focus Visible ─── */
+:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+.btn:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+}
+
+.nav-toggle:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 4px;
+}
+
+.nav-link:focus-visible {
+  color: var(--gold);
 }
 
 /* ─── Selection ─── */
