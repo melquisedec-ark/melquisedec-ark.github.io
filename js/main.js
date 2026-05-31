@@ -128,11 +128,15 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  /* ─── Update version badge ─── */
+  /* ─── Update version badge + stats ─── */
   function updateVersionBadge(release) {
     const badge = document.getElementById('versionBadge');
     if (badge && release?.tag_name) {
       badge.textContent = `MQ App ${release.tag_name}`;
+    }
+    const statVersion = document.getElementById('statVersion');
+    if (statVersion && release?.tag_name) {
+      statVersion.textContent = release.tag_name.replace(/^v/, '');
     }
   }
 
