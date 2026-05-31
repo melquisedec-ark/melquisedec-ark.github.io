@@ -128,8 +128,19 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  /* ─── Update version badge ─── */
+  function updateVersionBadge(release) {
+    const badge = document.getElementById('versionBadge');
+    if (badge && release?.tag_name) {
+      badge.textContent = `MQ App ${release.tag_name}`;
+    }
+  }
+
   // Fetch and update
-  fetchLatestRelease().then(updateDownloadLinks);
+  fetchLatestRelease().then(data => {
+    updateDownloadLinks(data);
+    updateVersionBadge(data);
+  });
 
   /* ═══════════════════════════════════════════
      2. Download handler (mobile-safe)
