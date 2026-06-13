@@ -249,35 +249,104 @@ document.addEventListener('DOMContentLoaded', () => {
 
   /* ═══════════════════════════════════════════
      Download handler con analytics
+     — Híbrido: desktop usa <a> temporal + target=_blank,
+       mobile usa toast + location.href
      ═══════════════════════════════════════════ */
 
-  function triggerDownload(url, repoKey) {
-    // window.open es más compatible y no bloqueado por navegadores modernos
-    window.open(url, '_blank', 'noopener');
+  function isMobile() {
+    return /android|iphone|ipad|ipod|webos|blackberry|iemobile|opera mini/i
+      .test(navigator.userAgent);
+  }
 
-    // Analytics: trackear descarga
+  function sendAnalytics(url, repoKey) {
+    const filename = url.split('/').pop() || 'unknown';
     if (typeof gtag === 'function') {
       gtag('event', 'download', {
-        'platform': new URL(url).pathname.split('/').pop() || 'unknown',
+        'platform': filename,
         'version': repoKey || 'unknown',
         'download_url': url,
       });
     }
-    devLog(`Download: ${repoKey} → ${url}`);
+    // sendBeacon como respaldo (sobrevive al unload de la página)
+    try {
+      navigator.sendBeacon(url, '');
+    } catch (_) {}
+    devLog(`Download tracked: ${repoKey} → ${filename}`);
   }
 
-  document.addEventListener('click', (e) => {
-    const card = e.target.closest('.download-card, [data-platform]');
+  function showToast(msg) {
+    const old = document.querySelector('.download-toast');
+    if (old) old.remove();
+
+    const toast = document.createElement('div');
+    toast.className = 'download-toast';
+    toast.setAttribute('role', 'status');
+    toast.setAttribute('aria-live', 'polite');
+    toast.innerHTML =
+      '<div class="download-toast__content">' +
+        '<svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>' +
+        '<span>' + msg + '</span>' +
+      '</div>';
+    document.body.appendChild(toast);
+
+    requestAnimationFrame(function () {
+      toast.classList.add('download-toast--visible');
+    });
+
+    setTimeout(function () {
+      toast.classList.remove('download-toast--visible');
+      setTimeout(function () { toast.remove(); }, 300);
+    }, 3000);
+  }
+
+  function triggerDownload(url, repoKey) {
+    // 1. Analytics ANTES de navegar
+    sendAnalytics(url, repoKey);
+
+    // 2. Estrategia según plataforma
+    if (/* mobile */ /android|iphone|ipad|ipod|webos|blackberry|iemobile|opera mini/i.test(navigator.userAgent)) {
+      // Mobile: toast + navegación directa (único método que activa el motor de descargas)
+      showToast('Descarga iniciada — Revisa tus notificaciones');
+      setTimeout(function () { window.location.href = url; }, 800);
+    } else {
+      // Desktop: <a> temporal + target="_blank" (evita popup blockers)
+      var a = document.createElement('a');
+      a.href = url;
+      a.target = '_blank';
+      a.rel = 'noopener noreferrer';
+      a.style.display = 'none';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
+
+    devLog('Download: ' + repoKey + ' → ' + url);
+  }
+
+  document.addEventListener('click', function (e) {
+    var card = e.target.closest('.download-card, [data-platform]');
     if (card && card.href && card.href !== '#') {
       e.preventDefault();
-      // Determinar a qué repo pertenece
-      const repoGroup = card.closest('[data-repo-group]');
-      const repoKey = repoGroup ? repoGroup.dataset.repoGroup : 'unknown';
 
-      if (card.href.includes('releases/download')) {
+      var repoGroup = card.closest('[data-repo-group]');
+      var repoKey = repoGroup ? repoGroup.dataset.repoGroup : 'unknown';
+
+      if (card.href.indexOf('releases/download') !== -1) {
         triggerDownload(card.href, repoKey);
-      } else if (card.href.includes('releases/latest')) {
-        window.open(card.href, '_blank', 'noopener');
+      } else if (card.href.indexOf('releases/latest') !== -1) {
+        // releases/latest → abrir GitHub
+        if (/android|iphone|ipad|ipod|webos|blackberry|iemobile|opera mini/i.test(navigator.userAgent)) {
+          window.location.href = card.href;
+        } else {
+          var a = document.createElement('a');
+          a.href = card.href;
+          a.target = '_blank';
+          a.rel = 'noopener noreferrer';
+          a.style.display = 'none';
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+        }
       } else {
         triggerDownload(card.href, repoKey);
       }

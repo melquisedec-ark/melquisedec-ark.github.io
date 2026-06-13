@@ -1557,3 +1557,47 @@ ul { list-style: none; }
     padding: 1.25rem;
   }
 }
+
+/* ═══════════════════════════════════════════
+   Download Toast (para descarga en móvil)
+   ═══════════════════════════════════════════ */
+
+.download-toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  z-index: 9999;
+  background: #1a1a2e;
+  color: #fff;
+  padding: 14px 24px;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.35);
+  font-size: 15px;
+  line-height: 1.4;
+  transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55),
+              opacity 0.3s ease;
+  opacity: 0;
+  pointer-events: none;
+  max-width: 90vw;
+}
+
+.download-toast--visible {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+}
+
+.download-toast__content {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+@media (max-width: 640px) {
+  .download-toast {
+    bottom: 16px;
+    padding: 12px 18px;
+    font-size: 14px;
+    border-radius: 10px;
+  }
+}
