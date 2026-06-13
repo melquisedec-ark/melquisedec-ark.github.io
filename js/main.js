@@ -59,10 +59,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   /* ─── Platform pattern mapping ─── */
   const PLATFORM_MAP = {
-    'windows':         { pattern: 'windows',         fallback: '.exe'    },
+    'windows':         { pattern: 'windows',         fallback: '.exe'      },
     'linux':           { pattern: 'linux',           fallback: '.AppImage' },
-    'mac':             { pattern: 'mac',             fallback: '.dmg'    },
-    'android':         { pattern: 'apk',             fallback: '.apk'    },
+    'mac':             { pattern: 'mac',             fallback: '.dmg'      },
+    'android':         { pattern: 'arm64-v8a',       fallback: '.apk'      },
   };
 
   /* ─── Update download links for a specific repo ─── */
