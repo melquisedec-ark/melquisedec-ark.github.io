@@ -1,24 +1,48 @@
 {
-  "name": "MQ App by Melquisedec — Himnos con acordes y proyección en vivo",
+  "name": "MQ App by Melquisedec — Himnos, acordes y Biblia",
   "short_name": "MQ App",
-  "description": "Descarga MQ App para himnos con acordes, proyección en vivo y control multidispositivo. Windows, Linux, macOS y Android.",
+  "description": "Dos versiones: Himnario con acordes o App Completa con Biblia. Proyección en vivo, control remoto y multiplataforma.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
-  "background_color": "#000000",
+  "background_color": "#0a0a0a",
   "theme_color": "#000000",
-  "categories": ["music", "religion", "productivity"],
+  "categories": ["music", "religion", "productivity", "books"],
   "lang": "es",
   "icons": [
     {
-      "src": "assets/icons/favicon.png",
-      "sizes": "512x512",
+      "src": "assets/icons/icon-48.png",
+      "sizes": "48x48",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "assets/icons/favicon.png",
+      "src": "assets/icons/icon-72.png",
+      "sizes": "72x72",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "assets/icons/icon-96.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "assets/icons/icon-144.png",
+      "sizes": "144x144",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "assets/icons/icon-192.png",
       "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "assets/icons/icon-512.png",
+      "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
     }

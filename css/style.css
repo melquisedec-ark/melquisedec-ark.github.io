@@ -23,6 +23,18 @@
   --max-width: 1100px;
   --nav-height: 70px;
   --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Design System Aliases (compatibilidad con el diseno especificado) */
+  --color-primary: #D4AF37;
+  --color-primary-dark: #B8962F;
+  --color-primary-light: #E8C84A;
+  --color-bg: #0a0a0a;
+  --color-surface: #1a1a1a;
+  --color-surface-light: #2a2a2a;
+  --color-text: #f0f0f0;
+  --color-text-muted: #a0a0a0;
+  --color-border: rgba(255, 255, 255, 0.06);
+  --color-border-hover: rgba(212, 175, 55, 0.2);
 }
 
 /* ─── Reset & Base ─── */
@@ -923,6 +935,8 @@ ul { list-style: none; }
     display: none;
   }
 
+
+
   .btn-lg {
     width: 100%;
     justify-content: center;
@@ -1024,4 +1038,522 @@ ul { list-style: none; }
 
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(212, 175, 55, 0.3);
+}
+
+/* ═══════════════════════════════════════════
+   Tabs Component (Downloads section)
+   ═══════════════════════════════════════════ */
+
+.tabs {
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+/* ─── Tab Navigation ─── */
+.tabs__nav {
+  position: relative;
+  display: flex;
+  gap: 0;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.tabs__btn {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1rem 1.5rem;
+  background: transparent;
+  border: none;
+  color: var(--gray);
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  position: relative;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.tabs__btn::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: var(--gold);
+  transform: scaleX(0);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.tabs__btn:hover {
+  color: var(--gold-light);
+}
+
+.tabs__btn:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: -2px;
+  border-radius: 4px;
+}
+
+.tabs__btn--active {
+  color: var(--gold);
+}
+
+.tabs__btn--active::after {
+  transform: scaleX(1);
+}
+
+.tabs__btn-icon {
+  flex-shrink: 0;
+  opacity: 0.6;
+}
+
+.tabs__btn--active .tabs__btn-icon {
+  opacity: 1;
+}
+
+/* ─── Tab Panels ─── */
+.tabs__panel {
+  display: none;
+  animation: tabFadeIn 0.4s ease-out;
+}
+
+.tabs__panel--active {
+  display: block;
+}
+
+@keyframes tabFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ═══════════════════════════════════════════
+   Version Card (inside tabs)
+   ═══════════════════════════════════════════ */
+
+.version-card {
+  background: var(--black-card);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 20px;
+  padding: 2.5rem;
+}
+
+.version-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.version-card__title {
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--white);
+}
+
+.version-card__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--gold);
+  background: rgba(212, 175, 55, 0.1);
+  border: 1px solid rgba(212, 175, 55, 0.2);
+  padding: 0.3rem 1rem;
+  border-radius: 100px;
+  white-space: nowrap;
+}
+
+.version-card__badge--gold {
+  background: linear-gradient(135deg, rgba(212, 175, 55, 0.15), rgba(212, 175, 55, 0.08));
+  border-color: rgba(212, 175, 55, 0.35);
+  box-shadow: 0 0 20px rgba(212, 175, 55, 0.05);
+}
+
+.version-card__desc {
+  color: var(--gray);
+  font-size: 0.95rem;
+  line-height: 1.8;
+  margin-bottom: 1.5rem;
+  max-width: 580px;
+}
+
+.version-card__features {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.6rem;
+  margin-bottom: 2rem;
+  list-style: none;
+}
+
+.version-card__feature {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--gray);
+  font-size: 0.9rem;
+}
+
+.version-card__feature svg {
+  flex-shrink: 0;
+  color: var(--gold);
+}
+
+/* ─── Platform download cards within tabs ─── */
+.version-card__platforms {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.version-card__platforms .download-card {
+  padding: 1.25rem 0.75rem;
+}
+
+.version-card__platforms .download-icon {
+  width: 40px;
+  height: 40px;
+  margin-bottom: 0.75rem;
+}
+
+.version-card__platforms .download-title {
+  font-size: 0.9rem;
+}
+
+.version-card__platforms .download-desc {
+  font-size: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.version-card__platforms .download-btn {
+  font-size: 0.8rem;
+}
+
+/* ═══════════════════════════════════════════
+   Feature Card — Exclusive (Biblia Completa)
+   ═══════════════════════════════════════════ */
+
+.feature-card--exclusive {
+  position: relative;
+  border: 1px solid rgba(212, 175, 55, 0.25);
+  background: linear-gradient(
+    180deg,
+    rgba(212, 175, 55, 0.04) 0%,
+    var(--black-card) 100%
+  );
+  overflow: hidden;
+}
+
+.feature-card--exclusive::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  opacity: 0.6;
+}
+
+.feature-card--exclusive:hover {
+  border-color: rgba(212, 175, 55, 0.4);
+  box-shadow: 0 12px 40px rgba(212, 175, 55, 0.08);
+}
+
+.feature-card__badge {
+  display: inline-block;
+  margin-top: 1rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--gold);
+  background: rgba(212, 175, 55, 0.1);
+  border: 1px solid rgba(212, 175, 55, 0.2);
+  padding: 0.2rem 0.75rem;
+  border-radius: 100px;
+}
+
+/* ═══════════════════════════════════════════
+   Comparison Table
+   ═══════════════════════════════════════════ */
+
+.comp-table-wrapper {
+  max-width: 650px;
+  margin: 0 auto;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.comp-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: var(--black-card);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.comp-table__th {
+  font-family: var(--font-heading);
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  padding: 1.25rem 1.5rem;
+  text-align: left;
+  background: rgba(255, 255, 255, 0.02);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  color: var(--gray);
+}
+
+.comp-table__th:first-child {
+  color: var(--white);
+}
+
+.comp-table__th--himnario,
+.comp-table__th--completa {
+  text-align: center;
+  width: 120px;
+}
+
+.comp-table__th--himnario {
+  color: var(--gray-light);
+}
+
+.comp-table__th--completa {
+  color: var(--gold);
+}
+
+.comp-table__row:not(:last-child) .comp-table__cell {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.comp-table__cell {
+  padding: 1rem 1.5rem;
+  font-size: 0.9rem;
+  color: var(--gray);
+}
+
+.comp-table__cell--label {
+  font-weight: 500;
+  color: var(--white);
+}
+
+.comp-table__cell--check {
+  text-align: center;
+}
+
+.comp-table__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.comp-table__icon--yes {
+  background: rgba(212, 175, 55, 0.12);
+  color: var(--gold);
+}
+
+.comp-table__icon--no {
+  background: rgba(255, 255, 255, 0.04);
+  color: rgba(255, 255, 255, 0.2);
+}
+
+/* ═══════════════════════════════════════════
+   Windows Unblock Note
+   ═══════════════════════════════════════════ */
+
+.win-unblock {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.35);
+  text-align: center;
+  margin-top: 0.5rem;
+  line-height: 1.5;
+}
+
+/* ═══════════════════════════════════════════
+   About — Two versions
+   ═══════════════════════════════════════════ */
+
+.about-versions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin: 1.5rem 0;
+}
+
+.about-version {
+  background: var(--black-card);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  padding: 1.5rem;
+  transition: var(--transition);
+}
+
+.about-version:hover {
+  border-color: rgba(212, 175, 55, 0.15);
+}
+
+.about-version__title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--white);
+  margin-bottom: 0.75rem;
+}
+
+.about-version__title svg {
+  flex-shrink: 0;
+  color: var(--gold);
+}
+
+.about-version__title--gold {
+  color: var(--gold);
+}
+
+.about-version p {
+  font-size: 0.9rem;
+  color: var(--gray);
+  line-height: 1.7;
+  margin: 0;
+}
+
+/* ═══════════════════════════════════════════
+   Downloads Footer Links
+   ═══════════════════════════════════════════ */
+
+[data-tab-switch] {
+  cursor: pointer;
+}
+
+/* ═══════════════════════════════════════════
+   Responsive — New Components
+   ═══════════════════════════════════════════ */
+
+@media (max-width: 768px) {
+  .tabs__btn {
+    font-size: 0.85rem;
+    padding: 0.85rem 1rem;
+  }
+
+  .tabs__btn-icon {
+    width: 16px;
+    height: 16px;
+  }
+
+  .version-card {
+    padding: 1.5rem;
+  }
+
+  .version-card__title {
+    font-size: 1.25rem;
+  }
+
+  .version-card__features {
+    grid-template-columns: 1fr;
+  }
+
+  .version-card__platforms {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .comp-table__th {
+    padding: 1rem 0.75rem;
+    font-size: 0.75rem;
+  }
+
+  .comp-table__cell {
+    padding: 0.75rem;
+    font-size: 0.8rem;
+  }
+
+  .about-versions {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .tabs__btn {
+    font-size: 0.8rem;
+    padding: 0.75rem 0.75rem;
+    gap: 0.35rem;
+  }
+
+  .tabs__btn-icon {
+    width: 14px;
+    height: 14px;
+  }
+
+  .version-card {
+    padding: 1.25rem;
+  }
+
+  .version-card__header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .version-card__platforms {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+  }
+
+  .version-card__platforms .download-card {
+    padding: 1rem 0.5rem;
+  }
+
+  .version-card__platforms .download-icon {
+    width: 32px;
+    height: 32px;
+    margin-bottom: 0.5rem;
+  }
+
+  .version-card__platforms .download-title {
+    font-size: 0.8rem;
+  }
+
+  .version-card__platforms .download-desc {
+    font-size: 0.7rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .comp-table-wrapper {
+    margin: 0 -1rem;
+    border-radius: 0;
+  }
+
+  .comp-table {
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+  }
+
+  .about-version {
+    padding: 1.25rem;
+  }
 }
