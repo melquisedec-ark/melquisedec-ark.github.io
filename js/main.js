@@ -73,9 +73,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const cards = container.querySelectorAll('[data-platform]');
     if (!cards.length) return;
 
-    const owner = REPOS[repoKey].owner;
-    const name = REPOS[repoKey].name;
-
     if (release && release.assets) {
       for (const card of cards) {
         const platform = card.dataset.platform;
@@ -86,16 +83,11 @@ document.addEventListener('DOMContentLoaded', () => {
         );
         if (asset) {
           card.href = asset.browser_download_url;
-        } else {
-          card.href = `https://github.com/${owner}/${name}/releases`;
         }
-      }
-    } else {
-      // Fallback: no release data
-      for (const card of cards) {
-        card.href = `https://github.com/${owner}/${name}/releases/latest`;
+        // Si no hay match, conservamos el href del HTML (URL directa hardcodeada)
       }
     }
+    // Si no hay release data, conservamos los href del HTML (URLs directas hardcodeadas)
   }
 
   /* ─── Update version badge ─── */
