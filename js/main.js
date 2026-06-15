@@ -268,20 +268,40 @@ document.addEventListener('DOMContentLoaded', () => {
 
   document.addEventListener('click', function (e) {
     var card = e.target.closest('.download-card, [data-platform]');
-    if (card && card.href && card.href !== '#') {
-      var repoGroup = card.closest('[data-repo-group]');
-      var repoKey = repoGroup ? repoGroup.dataset.repoGroup : 'unknown';
+    if (!card || !card.href || card.href === '#') return;
 
-      // 1. Track analytics
-      sendAnalytics(card.href, repoKey);
+    var repoGroup = card.closest('[data-repo-group]');
+    var repoKey = repoGroup ? repoGroup.dataset.repoGroup : 'unknown';
 
-      // 2. NO preventDefault — dejamos que el <a> navegue naturalmente.
-      //    Si el href es releases/download/... GitHub redirige a S3 CDN con
-      //    Content-Disposition: attachment → el browser descarga solo.
-      //    Si el href aún es releases/latest (API no ha respondido), va a GitHub
-      //    Releases como fallback natural.
-      //    Esto funciona en TODOS los browsers (desktop y mobile) sin hacks.
+    // Track analytics
+    sendAnalytics(card.href, repoKey);
+
+    // Solo interceptamos si ya es una URL directa de descarga
+    if (card.href.indexOf('releases/download/') !== -1) {
+      e.preventDefault();
+
+      var isMobile = /android|iphone|ipad|ipod|webos|blackberry|iemobile|opera mini/i
+        .test(navigator.userAgent);
+
+      if (isMobile) {
+        // Mobile: navegación directa en la misma pestaña.
+        // El browser inicia la descarga inmediatamente al recibir
+        // Content-Disposition: attachment. Sin pestañas secundarias.
+        window.location.href = card.href;
+      } else {
+        // Desktop: <a> temporal + target=_blank (descarga en background)
+        var a = document.createElement('a');
+        a.href = card.href;
+        a.target = '_blank';
+        a.rel = 'noopener noreferrer';
+        a.style.display = 'none';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      }
     }
+    // Si el href aún es releases/latest (API no ha respondido o no hay asset),
+    // dejamos la navegación nativa — el usuario va a GitHub Releases como fallback.
   });
 
   /* ═══════════════════════════════════════════
