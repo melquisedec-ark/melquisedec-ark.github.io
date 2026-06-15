@@ -344,6 +344,29 @@
         <p class="section-desc">Selecciona la versión que deseas descargar y elige tu plataforma.</p>
       </div>
 
+      <!-- ═══════════════ Windows Firewall Notice ═══════════════ -->
+      <div class="win-notice" id="winNotice" hidden>
+        <div class="win-notice__inner">
+          <div class="win-notice__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="32" height="32" aria-hidden="true">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              <path d="M9 12l2 2 4-4" stroke-width="2"/>
+            </svg>
+          </div>
+          <div class="win-notice__body">
+            <p class="win-notice__title">🛡️ ¿Problemas con el Firewall en Windows?</p>
+            <p class="win-notice__desc">Si al abrir MQ App no puedes conectar desde tu celular (el control remoto no funciona), sigue estos pasos <strong>antes de extraer el ZIP</strong>:</p>
+            <ol class="win-notice__steps">
+              <li><strong>Clic derecho</strong> sobre el ZIP descargado → <strong>Propiedades</strong></li>
+              <li>Pestaña <strong>General</strong> → marca <strong>"Desbloquear"</strong> → <strong>Aceptar</strong></li>
+              <li><strong>Extrae el ZIP</strong>. Windows Firewall te preguntará → haz clic en <strong>"Permitir acceso"</strong></li>
+            </ol>
+            <p class="win-notice__tip">💡 ¿Ya extrajiste el ZIP? Desbloquea directamente el archivo <code>mq_app.exe</code> con los mismos pasos.</p>
+          </div>
+          <button class="win-notice__close" id="winNoticeClose" aria-label="Cerrar aviso">✕</button>
+        </div>
+      </div>
+
       <div class="tabs fade-in">
         <!-- Tab Navigation -->
         <div class="tabs__nav" role="tablist" aria-label="Versiones disponibles">
@@ -448,7 +471,6 @@
               </a>
             </div>
 
-            <p class="win-unblock">💡 ¿Windows bloquea la descarga? → Haz clic derecho &gt; Propiedades &gt; General &gt; Desbloquear</p>
           </div>
         </div>
 
@@ -536,7 +558,6 @@
               </a>
             </div>
 
-            <p class="win-unblock">💡 ¿Windows bloquea la descarga? → Haz clic derecho &gt; Propiedades &gt; General &gt; Desbloquear</p>
           </div>
         </div>
       </div>

@@ -356,6 +356,29 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /* ═══════════════════════════════════════════
+     Windows Firewall Notice — mostrar solo en Windows
+     ═══════════════════════════════════════════ */
+
+  const winNotice = document.getElementById('winNotice');
+  if (winNotice) {
+    const isWindows = navigator.platform?.toLowerCase().includes('win')
+                   || navigator.userAgent?.toLowerCase().includes('windows');
+    if (isWindows) {
+      const dismissed = localStorage.getItem('melquisedec_win_notice_dismissed');
+      if (!dismissed) {
+        winNotice.hidden = false;
+      }
+      const closeBtn = document.getElementById('winNoticeClose');
+      if (closeBtn) {
+        closeBtn.addEventListener('click', function () {
+          winNotice.hidden = true;
+          localStorage.setItem('melquisedec_win_notice_dismissed', 'true');
+        });
+      }
+    }
+  }
+
+  /* ═══════════════════════════════════════════
      Register Service Worker (PWA)
      ═══════════════════════════════════════════ */
 
